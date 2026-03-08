@@ -23,9 +23,10 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 12),
     )..repeat();
 
-    /// 5 saniye sonra onboarding'e geç
     Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, "/onboarding");
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/onboarding');
+      }
     });
   }
 
@@ -35,11 +36,12 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
-  Widget orbitItem(String path, Color glow) {
+  Widget orbitItem(IconData icon, Color glow) {
     return Container(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
+        color: glow.withOpacity(0.3),
         boxShadow: [
           BoxShadow(
             color: glow.withOpacity(0.8),
@@ -48,7 +50,11 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         ],
       ),
-      child: Image.asset(path, width: 40),
+      child: Icon(
+        icon,
+        color: Colors.white,
+        size: 30,
+      ),
     );
   }
 
@@ -56,115 +62,99 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A1B69),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          /// 🔵 BACKGROUND GRADIENT
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF0A1B69),
-                  Color(0xFF3F76E5),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF0A1B69),
+              Color(0xFF3F76E5),
+            ],
+          ),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.rotate(
+                  angle: _controller.value * 2 * pi,
+                  child: SizedBox(
+                    width: 460,
+                    height: 460,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: 15,
+                          left: 460 / 2 - 20,
+                          child: orbitItem(Icons.child_care, Colors.cyanAccent),
+                        ),
+                        Positioned(
+                          left: 0,
+                          top: 460 / 2 - 20,
+                          child: orbitItem(Icons.star, Colors.yellowAccent),
+                        ),
+                        Positioned(
+                          bottom: 15,
+                          left: 460 / 2 - 20,
+                          child: orbitItem(Icons.face, Colors.pinkAccent),
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 460 / 2 - 20,
+                          child: orbitItem(Icons.card_giftcard, Colors.redAccent),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+            Center(
+              child: SizedBox(
+                width: 320,
+                height: 320,
+                child: GifView.asset(
+                  'assets/splash/glow.gif',
+                  frameRate: 30,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Center(
+              child: Image.asset(
+                'assets/splash/branding/kiddo_512.png',
+                width: 230,
+              ),
+            ),
+            Positioned(
+              bottom: 70,
+              child: Column(
+                children: const [
+                  Text(
+                    'Earn Stars.',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFC35C),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    'Unlock Rewards.',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFC35C),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
-
-          /// 🔥 ORBIT ANIMATION (Expanded radius & more outer spacing)
-AnimatedBuilder(
-  animation: _controller,
-  builder: (context, child) {
-    return Transform.rotate(
-      angle: _controller.value * 2 * pi,
-      child: SizedBox(
-        width: 460,   // orbit ring width (380 → 460)
-        height: 460,  // orbit ring height
-        child: Stack(
-          children: [
-            /// Boy (top) - biraz içeri aldık
-            Positioned(
-              top: 15,                      // 0 → 15
-              left: 460 / 2 - 20,
-              child: orbitItem("assets/splash/orbit/boy.png", Colors.cyanAccent),
-            ),
-
-            /// Star (left)
-            Positioned(
-              left: 0,
-              top: 460 / 2 - 20,
-              child: orbitItem("assets/splash/orbit/star.png", Colors.yellowAccent),
-            ),
-
-            /// Girl (bottom) - biraz içeri aldık
-            Positioned(
-              bottom: 15,                   // 0 → 15
-              left: 460 / 2 - 20,
-              child: orbitItem("assets/splash/orbit/girl.png", Colors.pinkAccent),
-            ),
-
-            /// Gift (right)
-            Positioned(
-              right: 0,
-              top: 460 / 2 - 20,
-              child: orbitItem("assets/splash/orbit/gift.png", Colors.redAccent),
-            ),
           ],
         ),
-      ),
-    );
-  },
-),
-
-          /// ✨ EXISTING GLOW GIF
-          Center(
-            child: SizedBox(
-              width: 320,
-              height: 320,
-              child: GifView.asset(
-                "assets/splash/glow.gif",
-                frameRate: 30,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-
-          /// 🎨 LOGO
-          Center(
-            child: Image.asset(
-              "assets/splash/branding/kiddo_512.png",
-              width: 230,
-            ),
-          ),
-
-          /// ⭐ SLOGAN
-          Positioned(
-            bottom: 70,
-            child: Column(
-              children: const [
-                Text(
-                  "Earn Stars.",
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFFC35C),
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  "Unlock Rewards.",
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFFC35C),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

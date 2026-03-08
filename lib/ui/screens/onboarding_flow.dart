@@ -12,10 +12,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   int currentPage = 0;
 
   final List<String> images = [
-    "assets/splash/onboarding/screen1.png",
-    "assets/splash/onboarding/screen2.png",
-    "assets/splash/onboarding/screen3.png",
-    "assets/splash/onboarding/screen4.png",
+    'assets/splash/onboarding/screen1.png',
+    'assets/splash/onboarding/screen2.png',
   ];
 
   void nextPage() {
@@ -25,7 +23,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.pushReplacementNamed(context, "/home");
+      Navigator.pushReplacementNamed(context, '/home');
     }
   }
 
@@ -34,7 +32,6 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     return Scaffold(
       body: Stack(
         children: [
-          /// BACKGROUND IMAGES
           PageView.builder(
             controller: _controller,
             itemCount: images.length,
@@ -51,17 +48,14 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
             },
           ),
 
-          /// 🔴 SKIP — SADECE 1-2-3 SAYFALARDA
           if (currentPage < images.length - 1)
             Positioned(
               top: 50,
               right: 20,
               child: GestureDetector(
-                onTap: () =>
-                    Navigator.pushReplacementNamed(context, "/home"),
+                onTap: () => Navigator.pushReplacementNamed(context, '/home'),
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
                     color: Colors.red.withOpacity(0.25),
                     borderRadius: BorderRadius.circular(30),
@@ -74,7 +68,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                     ],
                   ),
                   child: const Text(
-                    "Skip",
+                    'Skip',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -84,16 +78,13 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 ),
               ),
             ),
-
-          /// 🟢 NEXT / LET'S GO
           Positioned(
             bottom: 50,
             right: 20,
             child: GestureDetector(
               onTap: nextPage,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 28, vertical: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
                 decoration: BoxDecoration(
                   color: Colors.green.withOpacity(0.25),
                   borderRadius: BorderRadius.circular(30),
@@ -106,9 +97,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                   ],
                 ),
                 child: Text(
-                  currentPage == images.length - 1
-                      ? "LET'S GO!"
-                      : "Next",
+                  currentPage == images.length - 1 ? "LET'S GO!" : 'Next',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24,

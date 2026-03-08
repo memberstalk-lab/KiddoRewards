@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
-import 'ui/screens/splash_screen.dart';
-import 'ui/screens/onboarding_flow.dart';
+import 'package:kiddo_rewards/ui/screens/splash_screen.dart';
+import 'package:kiddo_rewards/ui/screens/onboarding_flow.dart';
+import 'package:kiddo_rewards/ui/screens/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(const KiddoRewardsApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class KiddoRewardsApp extends StatelessWidget {
+  const KiddoRewardsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
-      // İlk açılan ekran
-      home: const SplashScreen(),
-
-      // Navigation routes
+      title: 'Kiddo Rewards',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: 'Poppins',
+      ),
+      initialRoute: '/',
       routes: {
+        '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingFlow(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }
